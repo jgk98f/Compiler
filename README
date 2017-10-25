@@ -1,0 +1,46 @@
+I have a table driven scanner and the table is located at the top of scanner.cpp!
+I implemented the local option for static semantics and code generation!
+
+Author: Jason Klamert
+Date: 4/26/2017
+Project: P4
+
+Driver's Name: comp
+
+Purpose:
+This program is to read from a file or take input from the keyboard and we will pass this file to
+the lexical scanner. Then we call the parser and it consumes tokens from the scanner a token at a time. It does this
+until EOF is encountered. If there is nothing left on the stack and we encounter EOF then the parse was successful.
+While we perform our recursive decent in the parser, we build our tree by returning a node for every function.
+This will get returned back to main. Then we shall use this tree to perform static semantic analysis and code generation.
+This is done using a stack as I have implemented the local option. While traversing the tree I will generate the target
+which is fileName.asm.
+
+Notes:
+The program can be ran in any of the following ways:
+comp fileName
+
+Compile:
+make -f MakeFile
+
+An extension of ".4280E01" will be appended to your file name when it is read into the program.
+
+Grammar:
+<program>  ->     program <vars> <block>
+<block>       ->      start <vars> <stats> stop
+<vars>          ->      empty | int Identifier <mvars> 
+<mvars>     ->     empty | : Identifier <mvars>
+<expr>        ->      <M> * <expr> | <M>
+<M>              ->     <T> / <M> | <T>
+<T>              ->      <F> + <T> | <F> - <T> | <F>
+<F>              ->      & <F> | <R>
+<R>              ->      ( <expr> ) | Identifier | Number   
+<stats>         ->      <stat>  <mStat>
+<mStat>       ->      empty | <stat>   <mStat>
+<stat>           ->      <in> | <out> | <block> | <if> | <loop> | <assign>
+<in>              ->      read >> Identifier ; 
+<out>            ->      print << <expr>  
+<if>               ->      decision ( <expr> <RO> <expr> ) <block>             
+<loop>          ->      while ( <expr> <RO> <expr> ) <block>
+<assign>       ->      Identifier = <expr> ;
+<RO>            ->      << | << = | >>  | >> = | ==  |  =!
